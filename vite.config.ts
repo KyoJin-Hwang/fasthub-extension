@@ -17,14 +17,7 @@ export default defineConfig(({ command }) => ({
           port: 5173,
           cors: {
             origin: ["chrome-extension://bmkmodkodklhogmigogfelhoafiohmlf"],
-            methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            allowedHeaders: [
-              "Content-Type",
-              "Authorization",
-              "accept",
-              "accept-language",
-              "content-language",
-            ],
+            allowedHeaders: ["accept", "accept-language"],
           },
         }
       : undefined,
