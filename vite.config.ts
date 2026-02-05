@@ -15,6 +15,7 @@ export default defineConfig(({ command }) => ({
     command === "serve"
       ? {
           port: 5173,
+          strictPort: true,
           cors: {
             origin: ["chrome-extension://bmkmodkodklhogmigogfelhoafiohmlf"],
             allowedHeaders: ["accept", "accept-language"],
