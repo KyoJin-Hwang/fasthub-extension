@@ -1,7 +1,7 @@
 /**
- * WHY: chrome.storage API는 콜백 기반 (구식)
- * Promise로 래핑해서 async/await 사용
- * 타입 안전성 추가
+ * WHY: chrome.storage API는 콜백 기반
+ * - Promise로 래핑해서 async/await 사용
+ * - 타입 안전성 추가
  */
 
 export const storage = {
