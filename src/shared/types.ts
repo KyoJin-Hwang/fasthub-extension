@@ -148,8 +148,8 @@ export interface Label {
  * @property {boolean} types.assigned - 이슈 할당 알림
  * @property {object} quietHours - 조용한 시간대 설정
  * @property {boolean} quietHours.enabled - 조용한 시간대 사용 여부
- * @property {number} quietHours.start - 시작 시간 (24시간제, 예: 22 = 오후 10시)
- * @property {number} quietHours.end - 종료 시간 (24시간제, 예: 8 = 오전 8시)
+ * @property {number} quietHours.start - 시작 시간 (24시간제, 예: 8 = 오전 8시)
+ * @property {number} quietHours.end - 종료 시간 (24시간제, 예: 22 = 오후 10시)
  */
 export interface NotificationSettings {
   enabled: boolean;
