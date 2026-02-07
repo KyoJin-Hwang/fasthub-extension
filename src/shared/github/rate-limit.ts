@@ -70,7 +70,7 @@ class RateLimitMonitor {
 }
 
 /**
- * WHY 싱글톤 패턴?
+ * WHY 싱글톤?
  * - 앱 전체에서 단 하나의 인스턴스만 사용
  * - popup과 background 모두 같은 인스턴스 공유
  */

@@ -10,7 +10,6 @@
  */
 
 import { Octokit } from "octokit";
-import { storage } from "../storage/chrome-storage";
 
 let octokitInstance: Octokit | null = null;
 
@@ -26,8 +25,9 @@ export async function getOctokit(): Promise<Octokit> {
     return octokitInstance;
   }
 
-  // WHY storage.get? chrome.storage에서 토큰 가져오기
-  const token = await storage.get<string>("github_token");
+  // WHY chrome.storage에서 토큰 가져오기
+  const result = await chrome.storage.local.get("github_token");
+  const token = result.github_token as string | undefined;
 
   // WHY throw? 로그인 안 했으면 에러 (UI에서 처리)
   if (!token) {
