@@ -60,7 +60,7 @@ export function SettingsPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 h-full overflow-y-auto">
       <h1 className="text-2xl font-bold">알림 설정</h1>
 
       {/* 전체 알림 켜기/끄기 */}

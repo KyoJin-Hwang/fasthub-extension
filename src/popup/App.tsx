@@ -2,7 +2,7 @@ import { SettingsPage } from "@/popup/components/SettingsPage";
 
 function App() {
   return (
-    <div className="w-[600px] h-full bg-slate-100">
+    <div className="w-[600px] h-[500px] bg-slate-100">
       <SettingsPage />
     </div>
   );
