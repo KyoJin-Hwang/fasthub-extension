@@ -6,7 +6,7 @@
  * - 부족하면 경고
  */
 
-import type { RateLimitInfo } from "../types";
+import type { RateLimitInfo } from "@/shared/types";
 
 /**
  * GitHub API 응답 헤더 타입
