@@ -1,12 +1,3 @@
-// src/popup/atoms/auth-atom.ts
-
-/**
- * WHY Jotai?
- * - Redux는 너무 복잡 (action, reducer, middleware...)
- * - Context API는 리렌더링 문제
- * - Jotai는 간단하고 빠름 (React 18+ 최적화)
- */
-
 import { atom } from "jotai";
 import type { GitHubUser } from "@/shared/types";
 
