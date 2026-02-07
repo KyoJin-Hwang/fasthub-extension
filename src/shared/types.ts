@@ -85,7 +85,7 @@ export interface PullRequest {
   updated_at: string;
   labels: Label[];
   comments: number;
-  repository_url: string;
+  repository_url?: string;
   body?: string;
 }
 

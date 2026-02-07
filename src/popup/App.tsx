@@ -1,4 +1,4 @@
-import { SettingsPage } from "@/popup/components/SettingsPage";
+import { SettingsPage } from "@/popup/pages/SettingsPage";
 
 function App() {
   return (

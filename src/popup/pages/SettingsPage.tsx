@@ -9,9 +9,17 @@ import {
   SelectValue,
 } from "@/popup/components/ui/select";
 import { Input } from "@/popup/components/ui/input";
+import { Button } from "@/popup/components/ui/button";
+import { toast } from "sonner";
+
+import { resetOctokit } from "@/shared/github/client";
+
+import { tokenAtom, userAtom } from "@/popup/atoms/auth-atom";
 
 export function SettingsPage() {
   const [settings, setSettings] = useAtom(settingsAtom);
+  const [, setToken] = useAtom(tokenAtom);
+  const [, setUser] = useAtom(userAtom);
 
   // 전체 알림 토글
   const toggleEnabled = () => {
@@ -59,15 +67,27 @@ export function SettingsPage() {
     }));
   };
 
+  // 로그아웃
+  const handleLogout = async () => {
+    if (!confirm("정말 로그아웃하시겠습니까?")) return;
+
+    await chrome.storage.local.remove("github_token");
+    resetOctokit();
+    setToken(null);
+    setUser(null);
+
+    toast.success("로그아웃되었습니다");
+  };
+
   return (
-    <div className="p-6 space-y-6 h-full overflow-y-auto">
+    <div className="p-4 space-y-4 h-full overflow-y-auto">
       <h1 className="text-2xl font-bold">알림 설정</h1>
 
       {/* 전체 알림 켜기/끄기 */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between border rounded-md border-slate-500 p-2">
         <div>
-          <h3 className="font-medium">알림 활성화</h3>
-          <p className="text-sm text-gray-500">
+          <h3 className="font-medium text-sm">알림 활성화</h3>
+          <p className="text-xs text-gray-500">
             알림을 활성화하거나 비활성화합니다
           </p>
         </div>
@@ -75,14 +95,16 @@ export function SettingsPage() {
       </div>
 
       {/* 체크 주기 설정 */}
-      <div className="space-y-2">
-        <h3 className="font-medium">체크 주기</h3>
-        <p className="text-sm text-gray-500">GitHub 알림 확인 주기</p>
+      <div className="flex items-center justify-between border rounded-md border-slate-500 p-2">
+        <div>
+          <h3 className="font-medium text-sm">체크 주기</h3>
+          <p className="text-xs text-gray-500">GitHub 알림 확인 주기</p>
+        </div>
         <Select
           value={settings.checkInterval.toString()}
           onValueChange={(value) => changeCheckInterval(Number(value))}
         >
-          <SelectTrigger className="w-48">
+          <SelectTrigger className="w-48 border-slate-500">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -96,15 +118,17 @@ export function SettingsPage() {
       </div>
 
       {/* 개별 알림 타입 설정 */}
-      <div className="space-y-4">
-        <h3 className="font-medium">알림 타입</h3>
-        <p className="text-sm text-gray-500">받을 알림 종류를 선택하세요</p>
+      <div className="space-y-4 border rounded-md border-slate-500 p-2">
+        <div>
+          <h3 className="font-medium text-sm">알림 타입</h3>
+          <p className="text-xs text-gray-500">받을 알림 종류를 선택하세요</p>
+        </div>
 
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-medium">코드 리뷰 요청</span>
-              <p className="text-sm text-gray-500">Review Request 알림</p>
+              <span className="font-medium text-sm">코드 리뷰 요청</span>
+              <p className="text-xs text-gray-500">Review Request 알림</p>
             </div>
             <Switch
               checked={settings.types.reviewRequest}
@@ -115,8 +139,8 @@ export function SettingsPage() {
 
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-medium">멘션</span>
-              <p className="text-sm text-gray-500">@멘션 알림</p>
+              <span className="font-medium text-sm">멘션</span>
+              <p className="text-xs text-gray-500">@멘션 알림</p>
             </div>
             <Switch
               checked={settings.types.mention}
@@ -127,8 +151,8 @@ export function SettingsPage() {
 
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-medium">할당</span>
-              <p className="text-sm text-gray-500">이슈/PR 할당 알림</p>
+              <span className="font-medium text-sm">할당</span>
+              <p className="text-xs text-gray-500">이슈/PR 할당 알림</p>
             </div>
             <Switch
               checked={settings.types.assigned}
@@ -140,11 +164,11 @@ export function SettingsPage() {
       </div>
 
       {/* 조용한 시간 설정 */}
-      <div className="space-y-4">
+      <div className="space-y-4 border rounded-md border-slate-500 p-2">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-medium">조용한 시간</h3>
-            <p className="text-sm text-gray-500">
+            <h3 className="font-medium text-sm">조용한 시간</h3>
+            <p className="text-xs text-gray-500">
               지정된 시간에는 알림을 받지 않습니다
             </p>
           </div>
@@ -165,7 +189,7 @@ export function SettingsPage() {
               onChange={(e) =>
                 changeQuietHours("start", Number(e.target.value))
               }
-              className="w-16"
+              className="w-16 border-slate-500"
             />
             <span className="text-sm">시</span>
           </div>
@@ -180,11 +204,22 @@ export function SettingsPage() {
               max="23"
               value={settings.quietHours.end}
               onChange={(e) => changeQuietHours("end", Number(e.target.value))}
-              className="w-16"
+              className="w-16 border-slate-500"
             />
             <span className="text-sm">시</span>
           </div>
         </div>
+      </div>
+
+      {/* 로그아웃 */}
+      <div className="flex items-center justify-end">
+        <Button
+          onClick={handleLogout}
+          variant="destructive"
+          className="w-[100px]"
+        >
+          로그아웃
+        </Button>
       </div>
 
       {/* 현재 설정 표시 */}
