@@ -44,7 +44,7 @@ export function useSearchRepositories(query: string) {
 /**
  * WHY useCreateRepository?
  * - Mutation (데이터 변경)
- * - onSuccess: 성공 시 목록 새로고침 (자동!)
+ * - onSuccess: 성공 시 목록 새로고침
  */
 export function useCreateRepository() {
   const queryClient = useQueryClient();
