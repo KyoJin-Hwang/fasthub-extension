@@ -14,7 +14,7 @@ import type { NotificationSettings } from "@/shared/types";
  */
 const defaultSettings: NotificationSettings = {
   enabled: true, // 알림 기본으로 켜짐
-  checkInterval: 5, // 5분 (권장 주기)
+  checkInterval: 5, // 5분
   types: {
     reviewRequest: true, // 가장 중요한 알림
     mention: true, // 두 번째로 중요
