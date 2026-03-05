@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   useRepositories,
-  useSearchRepositories,
 } from "@/popup/hooks/useRepositories";
 import { RepositoryCard } from "@/popup/components/repository/RepositoryCard";
 import { RepositoryListSkeleton } from "@/popup/components/common/Skeleton";
@@ -17,6 +16,8 @@ import { Search, FolderGit2, RefreshCw, Star } from "lucide-react";
 import { useAtom } from "jotai";
 import { favoritesAtom, loadFavorites } from "@/popup/atoms/favorites-atom";
 import { toast } from "sonner";
+import { rateLimitMonitor } from "@/shared/github/rate-limit";
+import { getOctokit } from "@/shared/github/client";
 
 export function RepositoriesPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,12 +28,19 @@ export function RepositoriesPage() {
   }, [setFavorites]);
 
   const { data: allRepos, isLoading, error, refetch } = useRepositories();
-  const { data: searchResults } = useSearchRepositories(searchQuery);
-  // favorites? 즐겨찾기 필터링
   const [favorites] = useAtom(favoritesAtom);
 
-  // WHY displayRepos? 검색어 있으면 검색 결과, 없으면 전체
-  const displayRepos = searchQuery ? searchResults : allRepos;
+  const filteredRepos = useMemo(() => {
+    if (!allRepos || !searchQuery.trim()) return allRepos;
+    const query = searchQuery.toLowerCase();
+    return allRepos.filter(
+      (repo) =>
+        repo.name.toLowerCase().includes(query) ||
+        repo.description?.toLowerCase().includes(query)
+    );
+  }, [allRepos, searchQuery]);
+
+  const displayRepos = searchQuery ? filteredRepos : allRepos;
 
   // WHY favoriteRepos? 즐겨찾기한 레포만 필터링
   const favoriteRepos =
@@ -41,6 +49,12 @@ export function RepositoriesPage() {
   // WHY 강제 Repository 목록 새로고침
   const handleRefresh = async () => {
     const result = await refetch();
+    
+    // rate limit 업데이트 (API 호출 후)
+    const octokit = await getOctokit();
+    const rateLimitRes = await octokit.rest.rateLimit.get();
+    rateLimitMonitor.update(rateLimitRes.headers);
+    
     if (result.error) {
       toast.error("Repository 목록 새로고침 실패하였습니다.");
     } else {

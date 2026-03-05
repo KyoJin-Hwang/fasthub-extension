@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import { tokenAtom, userAtom } from "./atoms/auth-atom";
 import { getOctokit } from "@/shared/github/client";
+import { rateLimitMonitor } from "@/shared/github/rate-limit";
 import { Header } from "./components/layout/Header";
 import { Navigation } from "./components/layout/Navigation";
 import { LoginPage } from "./pages/LoginPage";
@@ -40,8 +41,12 @@ function App() {
       if (token && !user) {
         try {
           const octokit = await getOctokit();
-          const { data } = await octokit.rest.users.getAuthenticated();
-          setUser(data);
+          const [userRes, rateLimitRes] = await Promise.all([
+            octokit.rest.users.getAuthenticated(),
+            octokit.rest.rateLimit.get(),
+          ]);
+          setUser(userRes.data);
+          rateLimitMonitor.update(rateLimitRes.headers);
         } catch (error) {
           console.error("Auto login failed:", error);
           navigate("/login");
