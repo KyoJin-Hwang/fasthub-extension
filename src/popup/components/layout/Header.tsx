@@ -59,7 +59,7 @@ export function Header() {
 
         <button
           onClick={() => navigate("/settings")}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+          className="p-2 hover:bg-slate-200 dark:hover:bg-gray-700 rounded transition-colors"
         >
           <Settings size={18} />
         </button>

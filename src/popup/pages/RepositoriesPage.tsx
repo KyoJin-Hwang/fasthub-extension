@@ -1,7 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import {
-  useRepositories,
-} from "@/popup/hooks/useRepositories";
+import { useRepositories } from "@/popup/hooks/useRepositories";
 import { RepositoryCard } from "@/popup/components/repository/RepositoryCard";
 import { RepositoryListSkeleton } from "@/popup/components/common/Skeleton";
 import { EmptyState } from "@/popup/components/common/EmptyState";
@@ -36,7 +34,7 @@ export function RepositoriesPage() {
     return allRepos.filter(
       (repo) =>
         repo.name.toLowerCase().includes(query) ||
-        repo.description?.toLowerCase().includes(query)
+        repo.description?.toLowerCase().includes(query),
     );
   }, [allRepos, searchQuery]);
 
@@ -49,12 +47,12 @@ export function RepositoriesPage() {
   // WHY 강제 Repository 목록 새로고침
   const handleRefresh = async () => {
     const result = await refetch();
-    
+
     // rate limit 업데이트 (API 호출 후)
     const octokit = await getOctokit();
     const rateLimitRes = await octokit.rest.rateLimit.get();
     rateLimitMonitor.update(rateLimitRes.headers);
-    
+
     if (result.error) {
       toast.error("Repository 목록 새로고침 실패하였습니다.");
     } else {
@@ -101,7 +99,7 @@ export function RepositoriesPage() {
           {/* WHY 새로고침 버튼? 캐시 무시하고 최신 데이터 */}
           <button
             onClick={handleRefresh}
-            className="p-2 hover:bg-slate-100 rounded-md transition-colors"
+            className="p-2 hover:bg-slate-200 rounded-md transition-colors"
             title="새로고침"
           >
             <RefreshCw size={18} className="text-slate-600" />
@@ -111,12 +109,18 @@ export function RepositoriesPage() {
 
       {/* WHY Tabs? 전체 vs 즐겨찾기 필터 */}
       <Tabs defaultValue="all" className="flex-1 flex flex-col">
-        <TabsList className="px-4 bg-white border-b border-slate-200">
-          <TabsTrigger value="all" className="gap-2">
+        <TabsList className="px-4 bg-white border-b border-slate-200 space-x-2">
+          <TabsTrigger
+            value="all"
+            className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
+          >
             <FolderGit2 size={16} />
             전체 ({allRepos?.length || 0})
           </TabsTrigger>
-          <TabsTrigger value="favorites" className="gap-2">
+          <TabsTrigger
+            value="favorites"
+            className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
+          >
             <Star size={16} />
             즐겨찾기 ({favoriteRepos.length})
           </TabsTrigger>

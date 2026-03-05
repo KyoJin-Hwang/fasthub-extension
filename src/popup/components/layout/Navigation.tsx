@@ -5,8 +5,8 @@ export function Navigation() {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `flex flex-col items-center gap-1 p-3 text-xs transition-colors ${
       isActive
-        ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20"
-        : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+        ? "text-blue-600 bg-blue-100 dark:bg-blue-900/30"
+        : "text-gray-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700"
     }`;
 
   return (
