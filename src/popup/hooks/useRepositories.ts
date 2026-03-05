@@ -24,7 +24,6 @@ export function useRepositories() {
     queryFn: fetchRepositories, // queryFn? 실제 API 호출
     staleTime: 5 * 60 * 1000, // 5분? API 절약 (5분간 캐시 사용)
     gcTime: 30 * 60 * 1000, // 30분? 메모리 보관 (빠른 복구)
-    refetchOnWindowFocus: false, // false? 팝업 특성상 불필요
   });
 }
 
@@ -45,7 +44,7 @@ export function useSearchRepositories(query: string) {
 /**
  * WHY useCreateRepository?
  * - Mutation (데이터 변경)
- * - onSuccess: 성공 시 목록 새로고침 (자동!)
+ * - onSuccess: 성공 시 목록 새로고침
  */
 export function useCreateRepository() {
   const queryClient = useQueryClient();

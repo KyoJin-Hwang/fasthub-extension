@@ -23,9 +23,9 @@ export async function fetchRepositories(): Promise<Repository[]> {
   const response = await octokit.rest.repos.listForAuthenticatedUser({
     sort: "updated",
     per_page: 100,
+    affiliation: "owner",
   });
 
-  // WHY rateLimitMonitor? API 남은 횟수 추적 (헤더에서 추출)
   rateLimitMonitor.update(response.headers);
 
   return response.data as Repository[];

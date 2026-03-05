@@ -52,20 +52,3 @@ export const userAtom = atom<GitHubUser | null>(null);
  * if (!isAuth) return <LoginPage />
  */
 export const isAuthenticatedAtom = atom((get) => get(tokenAtom) !== null);
-
-// ✅ 초기화: Chrome Storage에서 데이터 불러오기
-chrome.storage.local.get("github_token").then((result) => {
-  if (result.github_token !== undefined) {
-    // Jotai가 초기화되면 바로 atom 업데이트
-    // Provider가 있을 때만 동작
-    const jotaiProvider = document.querySelector("[data-jotai-provider]");
-    if (jotaiProvider) {
-      // atom 업데이트 방법: setTimeout으로 Provider 초기화 후 실행
-      setTimeout(() => {
-        // set 함수는 useAtom을 통해서만 접근 가능하므로,
-        // 여기서는 초기화된 값을 임시 저장만 함
-        console.log("GitHub token loaded from storage");
-      }, 0);
-    }
-  }
-});

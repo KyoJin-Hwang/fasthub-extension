@@ -34,7 +34,7 @@ export function useCreatedIssues() {
 
 /**
  * WHY useMentionedIssues?
- * - 나를 멘션한 Issue 목록 (가장 중요!)
+ * - 나를 멘션한 Issue 목록
  * - 기본 5분 주기 + Background 알림 즉시 반영
  */
 export function useMentionedIssues() {

@@ -21,7 +21,7 @@ export function useMyPullRequests() {
 
 /**
  * WHY useReviewRequests?
- * - 나에게 리뷰 요청된 PR (가장 중요!)
+ * - 나에게 리뷰 요청된 PR
  * - 기본 5분 주기 + Background 알림 즉시 반영
  */
 export function useReviewRequests() {
