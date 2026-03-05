@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   useRepositories,
   useSearchRepositories,
@@ -15,11 +15,16 @@ import {
 } from "@/popup/components/ui/tabs";
 import { Search, FolderGit2, RefreshCw, Star } from "lucide-react";
 import { useAtom } from "jotai";
-import { favoritesAtom } from "@/popup/atoms/favorites-atom";
+import { favoritesAtom, loadFavorites } from "@/popup/atoms/favorites-atom";
 import { toast } from "sonner";
 
 export function RepositoriesPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [, setFavorites] = useAtom(favoritesAtom);
+
+  useEffect(() => {
+    loadFavorites().then(setFavorites);
+  }, [setFavorites]);
 
   const { data: allRepos, isLoading, error, refetch } = useRepositories();
   const { data: searchResults } = useSearchRepositories(searchQuery);
