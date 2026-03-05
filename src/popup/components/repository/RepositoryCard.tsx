@@ -1,4 +1,4 @@
-import { Star, GitFork } from "lucide-react";
+import { Star, GitFork, Lock, Globe } from "lucide-react";
 import { useAtom } from "jotai";
 import { favoritesAtom } from "@/popup/atoms/favorites-atom";
 import { formatDistanceToNow } from "date-fns";
@@ -38,9 +38,16 @@ export function RepositoryCard({ repo }: Props) {
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-blue-600 hover:underline truncate">
-            {repo.name}
-          </h3>
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-blue-600 hover:underline truncate">
+              {repo.name}
+            </h3>
+            {repo.private ? (
+              <Lock size={14} className="text-slate-400 flex-shrink-0" />
+            ) : (
+              <Globe size={14} className="text-slate-400 flex-shrink-0" />
+            )}
+          </div>
 
           {repo.description && (
             <p className="text-sm text-slate-600 mt-1 line-clamp-2">
