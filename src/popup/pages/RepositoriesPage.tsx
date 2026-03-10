@@ -98,36 +98,36 @@ export function RepositoriesPage() {
               className="pl-10"
             />
           </div>
-
-          {/* WHY 새로고침 버튼? 캐시 무시하고 최신 데이터 */}
-          <button
-            onClick={handleRefresh}
-            className="p-2 hover:bg-slate-200 rounded-md transition-colors"
-            title="새로고침"
-          >
-            <RefreshCw size={18} className="text-slate-600" />
-          </button>
         </div>
       </div>
 
       {/* WHY Tabs? 전체 vs 즐겨찾기 필터 */}
       <Tabs defaultValue="all" className="flex-1 flex flex-col">
-        <TabsList className="px-4 bg-white border-b border-slate-200 space-x-2">
-          <TabsTrigger
-            value="all"
-            className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
+        <div className="flex items-center justify-between px-4 py-2 bg-white border-b border-slate-200">
+          <TabsList className="bg-white border-b border-slate-200 space-x-2">
+            <TabsTrigger
+              value="all"
+              className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
+            >
+              <FolderGit2 size={16} />
+              전체 ({allRepos?.length || 0})
+            </TabsTrigger>
+            <TabsTrigger
+              value="favorites"
+              className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
+            >
+              <Star size={16} />
+              즐겨찾기 ({favoriteRepos.length})
+            </TabsTrigger>
+          </TabsList>
+          <button
+            onClick={handleRefresh}
+            className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+            title="새로고침"
           >
-            <FolderGit2 size={16} />
-            전체 ({allRepos?.length || 0})
-          </TabsTrigger>
-          <TabsTrigger
-            value="favorites"
-            className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
-          >
-            <Star size={16} />
-            즐겨찾기 ({favoriteRepos.length})
-          </TabsTrigger>
-        </TabsList>
+            <RefreshCw size={16} className="text-gray-500" />
+          </button>
+        </div>
 
         {/* WHY TabsContent? 탭별 컨텐츠 */}
         <TabsContent value="all" className="flex-1 overflow-y-auto m-0">

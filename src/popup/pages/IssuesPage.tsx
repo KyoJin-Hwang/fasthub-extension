@@ -55,18 +55,31 @@ export function IssuesPage() {
 
   return (
     <div className="h-full flex flex-col">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="flex-1 flex flex-col"
+      >
         <div className="flex items-center justify-between px-4 py-2 bg-white border-b border-slate-200">
           <TabsList className="bg-transparent">
-            <TabsTrigger value="assigned" className="gap-2">
+            <TabsTrigger
+              value="assigned"
+              className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
+            >
               <UserCheck size={16} />
               할당됨 ({assigned?.length || 0})
             </TabsTrigger>
-            <TabsTrigger value="created" className="gap-2">
+            <TabsTrigger
+              value="created"
+              className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
+            >
               <CircleDot size={16} />
               생성함 ({created?.length || 0})
             </TabsTrigger>
-            <TabsTrigger value="mentioned" className="gap-2">
+            <TabsTrigger
+              value="mentioned"
+              className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
+            >
               <AtSign size={16} />
               멘션됨 ({mentioned?.length || 0})
             </TabsTrigger>

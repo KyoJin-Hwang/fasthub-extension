@@ -14,7 +14,12 @@ import {
 import { PullRequestCard } from "@/popup/components/pull-request/PullRequestCard";
 import { PullRequestListSkeleton } from "@/popup/components/common/Skeleton";
 import { EmptyState } from "@/popup/components/common/EmptyState";
-import { GitPullRequest, AlertCircle, UserCheck, RefreshCw } from "lucide-react";
+import {
+  GitPullRequest,
+  AlertCircle,
+  UserCheck,
+  RefreshCw,
+} from "lucide-react";
 import { toast } from "sonner";
 import { rateLimitMonitor } from "@/shared/github/rate-limit";
 import { getOctokit } from "@/shared/github/client";
@@ -55,17 +60,30 @@ export function PullRequestsPage() {
 
   return (
     <div className="h-full flex flex-col">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="flex-1 flex flex-col"
+      >
         <div className="flex items-center justify-between px-4 py-2 bg-white border-b border-slate-200">
           <TabsList className="bg-transparent">
-            <TabsTrigger value="review-requests" className="gap-2">
+            <TabsTrigger
+              value="review-requests"
+              className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
+            >
               <AlertCircle size={16} />
               리뷰 요청 ({reviewRequests?.length || 0})
             </TabsTrigger>
-            <TabsTrigger value="mine" className="gap-2">
+            <TabsTrigger
+              value="mine"
+              className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
+            >
               <GitPullRequest size={16} />내 PR ({myPRs?.length || 0})
             </TabsTrigger>
-            <TabsTrigger value="participating" className="gap-2">
+            <TabsTrigger
+              value="participating"
+              className="gap-2 data-[state=active]:bg-slate-100 hover:bg-slate-200"
+            >
               <UserCheck size={16} />
               참여 중 ({participating?.length || 0})
             </TabsTrigger>
@@ -73,7 +91,7 @@ export function PullRequestsPage() {
 
           <button
             onClick={handleRefresh}
-            className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+            className="p-2 hover:bg-slate-200 rounded-full transition-colors"
             title="새로고침"
           >
             <RefreshCw size={16} className="text-gray-500" />
