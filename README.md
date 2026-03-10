@@ -1,73 +1,56 @@
-# React + TypeScript + Vite
+# FastHub Extension
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+GitHub를 더 빠르게. 브라우저 팝업에서 **Repositories / Pull Requests / Issues**를 확인하고, 백그라운드에서 **리뷰 요청/멘션/할당**을 주기적으로 체크해 알림을 띄우는 크롬 익스텐션입니다.
 
-Currently, two official plugins are available:
+## 주요 기능
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Repositories**
+  - 검색, 즐겨찾기, 수동 새로고침
+- **Pull Requests**
+  - 리뷰 요청 / 내 PR / 참여 중 탭
+- **Issues**
+  - 할당됨 / 생성함 / 멘션됨 탭
+- **Notifications (Background)**
+  - 알람 기반 폴링으로 리뷰 요청/멘션/이슈 할당 변화 감지 시 OS 알림
+  - 조용한 시간(quiet hours) 및 타입별 on/off 지원
 
-## React Compiler
+## 개발 환경
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 설치
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 개발 서버
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+## 빌드 & 로드(개발자 모드)
+
+### 빌드
+
+```bash
+npm run build
+```
+
+### Chrome에 로드
+
+- Chrome → `chrome://extensions`
+- 우측 상단 **개발자 모드** ON
+- **압축해제된 확장 프로그램을 로드** → `dist/` 폴더 선택
+
+## 권한(permissions) 설명
+
+- **storage**: 토큰/설정/즐겨찾기 저장
+- **alarms**: 백그라운드에서 주기적 체크 트리거
+- **notifications**: OS 알림 표시
+- **host_permissions**
+  - `https://api.github.com/*`: GitHub API 호출
+  - `https://github.com/*`: 알림 클릭 시 GitHub 페이지 이동
+
+## 👏 Credits (출처 및 감사)
+* **Icon:** [Github 아이콘 제작자: pocike - Flaticon](https://www.flaticon.com/kr/free-icons/github)
+* **UI Components:** [shadcn/ui](https://ui.shadcn.com/)
