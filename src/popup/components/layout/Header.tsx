@@ -3,6 +3,7 @@ import { userAtom } from "@/popup/atoms/auth-atom";
 import { rateLimitMonitor } from "@/shared/github/rate-limit";
 import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export function Header() {
   const [user] = useAtom(userAtom);
@@ -21,9 +22,16 @@ export function Header() {
     return Math.round((rateLimit.remaining / rateLimit.limit) * 100);
   };
 
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const getResetTime = () => {
     if (!rateLimit?.reset) return "";
-    const diff = rateLimit.reset.getTime() - Date.now();
+    const diff = rateLimit.reset.getTime() - now;
     if (diff <= 0) return "리셋됨";
     const minutes = Math.floor(diff / 60000);
     return `${minutes}분 후`;
@@ -50,7 +58,8 @@ export function Header() {
         {rateLimit && (
           <div className="flex items-center gap-2 text-xs">
             <span className={`font-medium ${getRateLimitColor()}`}>
-              {rateLimit.remaining.toLocaleString()} / {rateLimit.limit.toLocaleString()}
+              {rateLimit.remaining.toLocaleString()} /{" "}
+              {rateLimit.limit.toLocaleString()}
             </span>
             <span className="text-gray-400">({getPercent()}%)</span>
             <span className="text-gray-400">{getResetTime()}</span>
