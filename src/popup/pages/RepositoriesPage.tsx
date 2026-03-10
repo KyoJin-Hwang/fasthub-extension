@@ -46,6 +46,9 @@ export function RepositoriesPage() {
 
   // WHY 강제 Repository 목록 새로고침
   const handleRefresh = async () => {
+    // 먼저 토스트 표시 (즉시 피드백)
+    toast("Repository 목록을 새로고침하는 중...");
+
     const result = await refetch();
 
     // rate limit 업데이트 (API 호출 후)

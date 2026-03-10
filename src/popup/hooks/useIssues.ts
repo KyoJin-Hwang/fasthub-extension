@@ -8,7 +8,6 @@ import {
 /**
  * WHY useAssignedIssues?
  * - 나에게 할당된 Issue 목록
- * - 기본 5분 주기 + Background 알림 즉시 반영
  */
 export function useAssignedIssues() {
   return useQuery({
@@ -34,8 +33,7 @@ export function useCreatedIssues() {
 
 /**
  * WHY useMentionedIssues?
- * - 나를 멘션한 Issue 목록
- * - 기본 5분 주기 + Background 알림 즉시 반영
+ * - 나를 @멘션한 Issue 목록
  */
 export function useMentionedIssues() {
   return useQuery({
