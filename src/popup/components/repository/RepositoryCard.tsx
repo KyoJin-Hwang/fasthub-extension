@@ -34,7 +34,7 @@ export function RepositoryCard({ repo }: Props) {
   return (
     <div
       onClick={handleClick}
-      className="p-4 hover:bg-slate-50 cursor-pointer transition-colors border-b border-slate-200"
+      className="p-4 hover:bg-slate-100 cursor-pointer transition-colors border-b border-slate-200"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
@@ -60,7 +60,9 @@ export function RepositoryCard({ repo }: Props) {
               <span className="flex items-center gap-1">
                 <span
                   className="w-3 h-3 rounded-full"
-                  style={{ backgroundColor: languageColors[repo.language] || "#6e7681" }}
+                  style={{
+                    backgroundColor: languageColors[repo.language] || "#6e7681",
+                  }}
                 />
                 {repo.language}
               </span>

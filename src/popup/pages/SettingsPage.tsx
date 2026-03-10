@@ -222,6 +222,18 @@ export function SettingsPage() {
         </Button>
       </div>
 
+      {/* 플래티콘 저작권 표시 부분 */}
+      <p className="text-xs text-slate-400">
+        <a
+          href="https://www.flaticon.com/kr/free-icons/github"
+          title="github 아이콘"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline"
+        >
+          Github 아이콘 제작자: pocike - Flaticon
+        </a>
+      </p>
       {/* 현재 설정 표시 */}
       {/* <div className="p-4 rounded-lg">
         <h3 className="font-medium mb-2">현재 설정</h3>

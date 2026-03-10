@@ -28,7 +28,7 @@ export async function fetchMyPullRequests(): Promise<PullRequest[]> {
     per_page: 50,
   });
 
-  rateLimitMonitor.update(response.headers);
+  rateLimitMonitor.update(response.headers, "search");
 
   return response.data.items as PullRequest[];
 }
@@ -50,7 +50,7 @@ export async function fetchReviewRequests(): Promise<PullRequest[]> {
     per_page: 50,
   });
 
-  rateLimitMonitor.update(response.headers);
+  rateLimitMonitor.update(response.headers, "search");
 
   return response.data.items as PullRequest[];
 }
@@ -72,7 +72,7 @@ export async function fetchParticipatingPRs(): Promise<PullRequest[]> {
     per_page: 50,
   });
 
-  rateLimitMonitor.update(response.headers);
+  rateLimitMonitor.update(response.headers, "search");
 
   return response.data.items as PullRequest[];
 }
@@ -96,7 +96,7 @@ export async function createPullRequest(params: {
 
   const response = await octokit.rest.pulls.create(params);
 
-  rateLimitMonitor.update(response.headers);
+  rateLimitMonitor.update(response.headers, "search");
 
   return response.data as PullRequest;
 }
@@ -118,7 +118,7 @@ export async function fetchBranches(
     per_page: 100,
   });
 
-  rateLimitMonitor.update(response.headers);
+  rateLimitMonitor.update(response.headers, "search");
 
   return response.data.map((branch) => branch.name);
 }

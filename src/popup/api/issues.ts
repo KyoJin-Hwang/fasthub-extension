@@ -26,7 +26,7 @@ export async function fetchAssignedIssues(): Promise<Issue[]> {
     per_page: 50,
   });
 
-  rateLimitMonitor.update(response.headers);
+  rateLimitMonitor.update(response.headers, "search");
 
   return response.data.items as Issue[];
 }
@@ -46,7 +46,7 @@ export async function fetchCreatedIssues(): Promise<Issue[]> {
     per_page: 50,
   });
 
-  rateLimitMonitor.update(response.headers);
+  rateLimitMonitor.update(response.headers, "search");
 
   return response.data.items as Issue[];
 }
@@ -66,7 +66,7 @@ export async function fetchMentionedIssues(): Promise<Issue[]> {
     per_page: 50,
   });
 
-  rateLimitMonitor.update(response.headers);
+  rateLimitMonitor.update(response.headers, "search");
 
   return response.data.items as Issue[];
 }
@@ -88,7 +88,7 @@ export async function createIssue(params: {
 
   const response = await octokit.rest.issues.create(params);
 
-  rateLimitMonitor.update(response.headers);
+  rateLimitMonitor.update(response.headers, "search");
 
   return response.data as Issue;
 }

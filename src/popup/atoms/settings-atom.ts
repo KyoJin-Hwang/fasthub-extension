@@ -27,10 +27,18 @@ const defaultSettings: NotificationSettings = {
   },
 };
 
-// ✅ 로컬 상태 (메모리) - 설정 저장
+/**
+ * WHY settingsBaseAtom?
+ * - 실제 값을 저장하는 기본 atom
+ * - 읽기/쓰기 모두 여기서 관리
+ */
 const settingsBaseAtom = atom<NotificationSettings>(defaultSettings);
 
-// ✅ 파생 atom - Chrome Storage와 동기화되는 설정
+/**
+ * WHY settingsAtom?
+ * - Chrome Storage와 동기화되는 atom
+ * - 쓰기 시 storage에도 자동 저장
+ */
 export const settingsAtom = atom(
   (get) => get(settingsBaseAtom), // 읽기: 메모리에서
   async (
@@ -40,36 +48,40 @@ export const settingsAtom = atom(
       | NotificationSettings
       | ((prev: NotificationSettings) => NotificationSettings),
   ) => {
-    // 쓰기: Storage에도 저장
+    // 새로운 설정값 계산
     const newSettings =
       typeof update === "function" ? update(get(settingsBaseAtom)) : update;
 
     // 메모리 업데이트
     set(settingsBaseAtom, newSettings);
 
-    // Chrome Storage 동기화
+    // Chrome Storage에 저장 (설정 영구 보존)
     try {
       await chrome.storage.sync.set({ notification_settings: newSettings });
     } catch (error) {
-      console.error("Failed to save settings:", error);
+      console.error("설정 저장 실패:", error);
     }
   },
 );
 
-// ✅ 초기화: Storage에서 데이터 불러오기
-chrome.storage.sync.get("notification_settings").then((result) => {
-  if (
-    result.notification_settings &&
-    typeof result.notification_settings === "object"
-  ) {
-    console.log("Settings loaded from storage");
+/**
+ * WHY loadSettingsFromStorage 함수?
+ * - 익스텐션 새로고침/재시작 시 storage에서 설정 불러오기
+ * - 이 함수는 App.tsx에서 초기화 시 호출됨
+ */
+export async function loadSettingsFromStorage(): Promise<NotificationSettings> {
+  try {
+    const result = await chrome.storage.sync.get("notification_settings");
+    const stored = result.notification_settings;
 
-    // Jotai Provider가 있을 때만 atom 업데이트
-    const jotaiProvider = document.querySelector("[data-jotai-provider]");
-    if (jotaiProvider) {
-      setTimeout(() => {
-        console.log("Jotai initialized, will update settings");
-      }, 0);
+    if (stored && typeof stored === "object") {
+      // Storage에 저장된 설정이 있으면 기본값과 병합
+      // (새로운 설정项이 추가되어도 호환성 유지)
+      return { ...defaultSettings, ...stored } as NotificationSettings;
     }
+  } catch (error) {
+    console.error("설정 불러오기 실패:", error);
   }
-});
+
+  return defaultSettings;
+}

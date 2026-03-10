@@ -8,7 +8,7 @@ import {
 /**
  * WHY useMyPullRequests?
  * - 내가 만든 PR 목록
- * - 기본 5분 주기
+ * - 기본 5분 캐시
  */
 export function useMyPullRequests() {
   return useQuery({
@@ -22,7 +22,6 @@ export function useMyPullRequests() {
 /**
  * WHY useReviewRequests?
  * - 나에게 리뷰 요청된 PR
- * - 기본 5분 주기 + Background 알림 즉시 반영
  */
 export function useReviewRequests() {
   return useQuery({

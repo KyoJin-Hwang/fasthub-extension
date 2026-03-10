@@ -8,8 +8,8 @@ import { Header } from "./components/layout/Header";
 import { Navigation } from "./components/layout/Navigation";
 import { LoginPage } from "./pages/LoginPage";
 import { RepositoriesPage } from "./pages/RepositoriesPage";
-// import { PullRequestsPage } from './pages/PullRequestsPage'
-// import { IssuesPage } from './pages/IssuesPage'
+import { PullRequestsPage } from "./pages/PullRequestsPage";
+import { IssuesPage } from "./pages/IssuesPage";
 import { SettingsPage } from "./pages/SettingsPage";
 
 function App() {
@@ -83,8 +83,8 @@ function App() {
         <main className="flex-1 overflow-y-auto bg-white">
           <Routes>
             <Route path="/" element={<RepositoriesPage />} />
-            {/* <Route path="/pull-requests" element={<PullRequestsPage />} /> */}
-            {/* <Route path="/issues" element={<IssuesPage />} /> */}
+            <Route path="/pull-requests" element={<PullRequestsPage />} />
+            <Route path="/issues" element={<IssuesPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
