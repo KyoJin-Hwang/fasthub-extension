@@ -1,41 +1,48 @@
+import { useEffect, useRef } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "@/popup/atoms/auth-atom";
 import { rateLimitMonitor } from "@/shared/github/rate-limit";
 import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
+/**
+ * WHY rate limit을 표시하지 않음?
+ * - Search API (30)와 일반 API (5000)가 다르기 때문에 복잡함
+ * - 대신 다 떨어지면 토스트 알림으로 경고
+ */
 export function Header() {
   const [user] = useAtom(userAtom);
   const navigate = useNavigate();
-  const rateLimit = rateLimitMonitor.current;
-
-  const getRateLimitColor = () => {
-    if (!rateLimit) return "text-gray-500";
-    if (rateLimit.remaining < 100) return "text-red-500";
-    if (rateLimit.remaining < 1000) return "text-yellow-500";
-    return "text-green-500";
-  };
-
-  const getPercent = () => {
-    if (!rateLimit) return 0;
-    return Math.round((rateLimit.remaining / rateLimit.limit) * 100);
-  };
-
-  const [now, setNow] = useState(() => Date.now());
+  const prevSearchRemaining = useRef<number | null>(null);
+  const prevCoreRemaining = useRef<number | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(interval);
-  }, []);
+    const checkRateLimit = () => {
+      const search = rateLimitMonitor.searchLimit;
+      const core = rateLimitMonitor.coreLimit;
 
-  const getResetTime = () => {
-    if (!rateLimit?.reset) return "";
-    const diff = rateLimit.reset.getTime() - now;
-    if (diff <= 0) return "리셋됨";
-    const minutes = Math.floor(diff / 60000);
-    return `${minutes}분 후`;
-  };
+      if (search && prevSearchRemaining.current !== null) {
+        if (prevSearchRemaining.current > 10 && search.remaining <= 10) {
+          toast.warning(`검색 API가 ${search.remaining}번 남았습니다.`);
+        } else if (prevSearchRemaining.current > 5 && search.remaining <= 5) {
+          toast.error(`검색 API가 ${search.remaining}번 남았습니다!`);
+        }
+      }
+      if (search) prevSearchRemaining.current = search.remaining;
+
+      if (core && prevCoreRemaining.current !== null) {
+        if (prevCoreRemaining.current > 1000 && core.remaining <= 1000) {
+          toast.warning(`API가 ${core.remaining}번 남았습니다.`);
+        } else if (prevCoreRemaining.current > 100 && core.remaining <= 100) {
+          toast.error(`API가 ${core.remaining}번 남았습니다!`);
+        }
+      }
+      if (core) prevCoreRemaining.current = core.remaining;
+    };
+
+    checkRateLimit();
+  }, []);
 
   return (
     <header className="bg-white dark:bg-gray-900 border-b px-4 py-3 flex items-center justify-between">
@@ -55,17 +62,6 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-4">
-        {rateLimit && (
-          <div className="flex items-center gap-2 text-xs">
-            <span className={`font-medium ${getRateLimitColor()}`}>
-              {rateLimit.remaining.toLocaleString()} /{" "}
-              {rateLimit.limit.toLocaleString()}
-            </span>
-            <span className="text-gray-400">({getPercent()}%)</span>
-            <span className="text-gray-400">{getResetTime()}</span>
-          </div>
-        )}
-
         <button
           onClick={() => navigate("/settings")}
           className="p-2 hover:bg-slate-200 dark:hover:bg-gray-700 rounded transition-colors"
